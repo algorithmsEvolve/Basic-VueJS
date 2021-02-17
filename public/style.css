@@ -1,0 +1,17 @@
+body {
+    margin: 5%;
+    font-family: Helvetica, sans-serif;
+}
+
+.active {
+    background: salmon;
+    color: white;
+}
+
+.error {
+    color: red
+}
+
+.input-group {
+    margin-bottom: 5px;
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Beginners.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app">
+        <header-component nama="Vuejs"></header-component>
+
+        <nav>
+            <router-link to="/">Home</router-link>
+            <router-link to="/about">About</router-link>
+            <router-link to="/kelas">Kelas</router-link>
+        </nav>
+
+        <main>
+            <!-- <kelas :items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas> -->
+            <!-- <home></home> -->
+            <router-view :items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"> </router-view>
+        </main>
+
+        <footer-component>
+            <p>Copyright 2021 - kelas.baledemy</p>
+        </footer-component>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/uuid@latest/dist/umd/uuidv4.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+    <script src="firebase.js"></script>
+    <script src="components.js"></script>
+    <script src="router.js"></script>
+    <script>
+        // vm
+        const vm = new Vue({
+            el: '#app',
+            router,
+            components: {
+                'home': Home
+            },
+            data: {
+                //string, number, boolean, array, object
+                // kelas: [
+                //     {
+                //         id: 1,
+                //         judul: 'Vuejs',
+                //         deskripsi: 'The Progressive Javascript Framework',
+                //         gambar: 'logo.png'
+                //     },
+                //     {
+                //         id: 2,
+                //         judul: 'Reactjs',
+                //         deskripsi: 'A Javascript library for building user interfaces',
+                //         gambar: 'react.png'
+                //     },
+                // ],
+                kelas: []
+            },
+            created() {
+                kelasRef.on('value', this.resultData, this.errorData)
+            },
+            methods: {
+                resultData(items) {
+                    this.kelas = []
+                    items.forEach((item) => {
+                        let data = {
+                            id: item.key,
+                            judul: item.val().judul,
+                            deskripsi: item.val().deskripsi,
+                            gambar: item.val().gambar
+                        }
+                        this.kelas.push(data)
+                    });
+                },
+                errorData(error) {
+                    console.log(error)
+                },
+                hapuskelas: function (id) {
+                    database.ref('/kelas/' + id).remove()
+                    swal({
+                        text: 'Data kelas berhasil dihapus',
+                        icon: 'warning',
+                    })
+                },
+                submitkelas: function (data) {
+                    kelasRef.push({
+                        judul: data.judul,
+                        deskripsi: data.deskripsi,
+                        gambar: data.gambar
+                    })
+                    swal({
+                        title: data.judul,
+                        text: 'Data kelas berhasil disimpan',
+                        icon: 'success',
+                    })
+                },
+            },
+            computed: {
+            }
+        })
+    </script>
+</body>
+
+</html>

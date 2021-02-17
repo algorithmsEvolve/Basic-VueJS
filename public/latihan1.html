@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Beginners.</title>
+
+  <style>
+    body {
+      margin: 5%;
+      font-family: Helvetica, sans-serif;
+    }
+
+    .active {
+      background: salmon;
+      color: white;
+      /* border: 0;
+      padding: 5px; */
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="app">
+    <header>
+      <img src="image/logo.png" width="80">
+      <h1 v-text="name"></h1>
+      <h3>Form Submit</h3>
+      <p>
+        <input type="text" placeholder="Nama Kelas" @keyup.enter="submit" v-model="kelasbaru">
+      </p>
+
+      <h3>Daftar kelas {{ kelas.length }}</h3>
+
+      <template v-if="kelas.length">
+        <ul>
+          <li v-for="(item, index) of kelas">{{ index+1 }} - {{ item }}</li>
+        </ul>
+      </template>
+      <li v-else>Kelas belum tersedia.</li>
+
+      <h3>Perulangan (1-5)</h3>
+      <ul>
+        <li v-for="x in 5">{{ x }}</li>
+      </ul>
+
+      <h3>Mencari bilangan genap: {{ numbers }}</h3>
+      <ul>
+        <li v-for="x in caribilangangenap(numbers)">{{ x }}</li>
+      </ul>
+
+
+      <p>{{ kelas }}</p>
+      <div>
+        <label><input type="checkbox" value="React" v-model="kelas">React</label>
+        <label><input type="checkbox" value="Vuejs" v-model="kelas">Vuejs</label>
+        <label><input type="checkbox" value="Angular" v-model="kelas">Angular</label>
+      </div>
+      <p>Bilangan ini adalah bilangan {{ infoBilangan }}</p>
+      <p>
+        <button @click="handleclick">
+          Ditekan
+        </button>
+      </p>
+      <img :src="gambar" width="500" alt="">
+      <p>The Progressive JavaScript Framework</p>
+
+      <a :class="{active: menu === 'home'}" href="#" @click.prevent="gantimenu('home')">Home</a>
+      <a :class="{active: menu === 'about'}" href="#" @click.prevent="gantimenu('about')">About</a>
+      <a :class="{active: menu === 'blog'}" href="#" @click.prevent="gantimenu('blog')">Blog</a>
+
+    </header>
+
+    <footer id="footer">
+      <p>Copyright 2021</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        //string, number, boolean, array, object
+        name: 'Doremi Fasolasido',
+        message: "Hello World!",
+        qty: 1,
+        namaDepan: 'Ekky',
+        namaBelakang: ' Ridyanto',
+        bilangan: 1,
+        link: '<a href="#">kelas.baledemy</a>',
+        gambar: 'image/angular.png',
+        menu: 'home',
+        kelas: ['Golang', 'PHP'],
+        numbers: [1, 2, 3, 4, 5],
+        kelasbaru: ''
+      },
+      methods: {
+        getname: function () {
+          return 'Hello, ' + this.name
+        },
+        ubahNama: function (namaBaru) {
+          this.name = namaBaru
+          return this.getname()
+        },
+        handleclick: function () {
+          this.bilangan++
+          this.gambar = "image/react.png"
+        },
+        caribilangangenap: function (data) {
+          return data.filter(angka => {
+            return angka % 2 === 0
+          })
+        },
+        gantimenu: function (data) {
+          this.menu = data
+        },
+        submit: function () {
+          this.kelas.unshift(this.kelasbaru)
+          this.kelasbaru = ''
+        }
+      },
+      computed: {
+        totalBayar: function () {
+          return this.qty * 10000
+        },
+        namaLengkap: function () {
+          return this.namaDepan + this.namaBelakang
+        },
+        infoBilangan: function () {
+          return this.bilangan % 2 === 0 ? 'genap' : 'ganjil'
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
